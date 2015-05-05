@@ -18,9 +18,9 @@ my_dir = os.path.dirname(os.path.realpath(__file__))
 os.chdir(my_dir)
 
 
-# original_headers = Parser().parsestr(sys.stdin.read())
-with open('email1.txt') as fp:
-    original_headers = Parser().parsestr(fp.read())
+original_headers = Parser().parsestr(sys.stdin.read())
+# with open('email1.txt') as fp:
+#     original_headers = Parser().parsestr(fp.read())
 
 sender_address = parseaddr(original_headers['From'])[1]
 receiver_address = parseaddr(original_headers['To'])[1]
