@@ -6,11 +6,11 @@
   don't give a flying fuck?
 - Did you already set up a vacation autoresponse but they use lists and your
   emails get delivered to the list response (/dev/null most of the time)?
-- Did you get a fuckton of recurring inquiries?
+- Did you get a fuckton of recurring irrelevant inquiries?
 
-Then this is for you. If you set up your email server to pipe the email into
-this tool after filtering for the addresses (used with dovecot2/sieve filters),
-it will send replies to the `From` header, not the `Return-Path` one.
+Then this is for you. If you set up your email server to pipe the email body
+into this tool after filtering for the addresses (used with dovecot2/sieve
+filters), it will send replies to the `From` header, not the `Return-Path` one.
 
 Am I a dick for implementing this? No more than the recruiters unwilling to
 update their filters/mailing lists.
@@ -26,10 +26,8 @@ Used python3 modules:
 
 ## Requirements:
 
-A mailserver.
-
-Pretty much nothing else than `python3`. Modules come shipped.
-
+- A mailserver.
+- Sqlite and its python bindings.
 - `text-reply.txt` containing the text version of your reply
 - `html-reply.html` containing the html version of your reply
 

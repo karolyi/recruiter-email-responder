@@ -46,6 +46,10 @@ if len(rows):
     if last_used_ts >= one_day_before:
         cursor.close()
         conn.close()
+        syslog.syslog(
+            'Not sending recruiter autoreply to %s, last sent at %s' % (
+                original_headers['From'], last_used_ts)
+        )
         sys.exit(0)
 
 if len(rows) == 0:
@@ -72,6 +76,8 @@ msg = MIMEMultipart('alternative')
 msg['Subject'] = 'Re: %s' % original_headers['Subject']
 msg['From'] = original_headers['To']
 msg['To'] = original_headers['From']
+if original_headers['Message-Id']:
+    msg['References'] = original_headers['Message-Id']
 
 with open('text-reply.txt') as fp:
     text_reply = fp.read()
