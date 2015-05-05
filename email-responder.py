@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import sys
+import os
 import smtplib
 import sqlite3
 import datetime
@@ -10,9 +11,13 @@ from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from email.parser import Parser
 
-# msg = MIMEText(sys.stdin.read())
-with open('email1.txt') as fp:
-    original_headers = Parser().parsestr(fp.read())
+# CWD to our dir, just to be on the safe side
+my_dir = os.path.dirname(os.path.realpath(__file__))
+os.chdir(my_dir)
+
+msg = Parser().parsestr(sys.stdin.read())
+# with open('email1.txt') as fp:
+#     original_headers = Parser().parsestr(fp.read())
 
 conn = sqlite3.connect(
     'emails.db',

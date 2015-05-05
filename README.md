@@ -36,8 +36,9 @@ Pretty much nothing else than `python3`. Modules come shipped.
 ## Setup:
 
 - Install `python3` (do I need to say this?)
-- Install this repository into a random directory, reachable for dovecot2
+- Clone this repository into a random directory, reachable for dovecot2
+- Initialize the sqlite db with running `init-schema.sh`
 - Copy your replies (mentioned above) into the same repo directory
 - Edit your sieve configuration to pipe your given role into this tool.
 
-Sieve rule example:
+Sieve rule example (`dovecot2` has the pipe plugin built in per default):
