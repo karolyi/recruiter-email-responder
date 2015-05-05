@@ -39,4 +39,3 @@ Used python3 modules:
 - Copy your replies (mentioned above) into the same repo directory
 - Edit your sieve configuration to pipe your given role into this tool.
 
-Sieve rule example (`dovecot2` has the pipe plugin built in per default):
