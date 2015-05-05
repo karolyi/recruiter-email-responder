@@ -53,7 +53,6 @@ decoded_subject = join_first_items(
 
 smtp_to = make_address(original_headers['From'])
 smtp_from = make_address(original_headers['To'])
-print (smtp_from, smtp_to)
 
 conn = sqlite3.connect(
     os.path.join(my_dir, 'emails.db'),
@@ -130,7 +129,7 @@ s = smtplib.SMTP('localhost')
 # sendmail function takes 3 arguments: sender's address, recipient's address
 # and message to send - here it is sent as one string.
 s.sendmail(
-    smtp_to,
     smtp_from,
+    smtp_to,
     msg.as_string())
 s.quit()
