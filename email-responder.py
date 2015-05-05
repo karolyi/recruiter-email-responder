@@ -11,14 +11,26 @@ import codecs
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from email.parser import Parser
+from email import header
 
 # CWD to our dir, just to be on the safe side
 my_dir = os.path.dirname(os.path.realpath(__file__))
 os.chdir(my_dir)
 
-original_headers = Parser().parsestr(sys.stdin.read())
-# with open('email1.txt') as fp:
-#     original_headers = Parser().parsestr(fp.read())
+
+def join_first_items(item_list):
+    return ''.join([item[0] for item in item_list])
+
+# original_headers = Parser().parsestr(sys.stdin.read())
+with open('email1.txt') as fp:
+    original_headers = Parser().parsestr(fp.read())
+
+decoded_from = join_first_items(
+    header.decode_header(original_headers['From']))
+decoded_to = join_first_items(
+    header.decode_header(original_headers['To']))
+decoded_subject = join_first_items(
+    header.decode_header(original_headers['Subject']))
 
 conn = sqlite3.connect(
     os.path.join(my_dir, 'emails.db'),
@@ -27,7 +39,7 @@ cursor = conn.cursor()
 cursor.execute(
     'SELECT * FROM email_usage WHERE email = ?',
     (
-        original_headers['From'],
+        decoded_from,
     )
 )
 rows = cursor.fetchall()
@@ -40,7 +52,7 @@ if len(rows):
             'WHERE email = ?'
         ),
         (
-            original_headers['From'],
+            decoded_from,
         )
     )
     conn.commit()
@@ -49,7 +61,7 @@ if len(rows):
         conn.close()
         syslog.syslog(
             'Not sending recruiter autoreply to %s, last sent at %s' % (
-                original_headers['From'], last_used_ts)
+                decoded_from, last_used_ts)
         )
         sys.exit(0)
 
@@ -61,7 +73,7 @@ if len(rows) == 0:
         ),
         (
             datetime.datetime.now(),
-            original_headers['From'],
+            decoded_from,
             1
         )
     )
@@ -71,12 +83,13 @@ conn.close()
 
 
 # Prepare and send the email
-syslog.syslog('Sending recruiter autoreply to %s' % original_headers['From'])
+syslog.syslog('Sending recruiter autoreply to %s' % decoded_from)
+
 
 msg = MIMEMultipart('alternative')
-msg['Subject'] = 'Re: %s' % original_headers['Subject']
-msg['From'] = original_headers['To']
-msg['To'] = original_headers['From']
+msg['Subject'] = 'Re: %s' % decoded_subject
+msg['From'] = decoded_to
+msg['To'] = decoded_from
 if original_headers['Message-Id']:
     msg['References'] = original_headers['Message-Id']
 
@@ -96,7 +109,7 @@ s = smtplib.SMTP('localhost')
 # sendmail function takes 3 arguments: sender's address, recipient's address
 # and message to send - here it is sent as one string.
 s.sendmail(
-    original_headers['To'],
-    original_headers['From'],
+    decoded_to,
+    decoded_from,
     msg.as_string())
 s.quit()
