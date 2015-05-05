@@ -12,6 +12,7 @@ from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from email.parser import Parser
 from email import header
+from email.utils import parseaddr
 
 # CWD to our dir, just to be on the safe side
 my_dir = os.path.dirname(os.path.realpath(__file__))
@@ -27,6 +28,7 @@ def join_first_items(item_list):
             result_list.append(item[0])
     return ''.join(result_list)
 
+
 # original_headers = Parser().parsestr(sys.stdin.read())
 with open('email1.txt') as fp:
     original_headers = Parser().parsestr(fp.read())
@@ -37,6 +39,14 @@ decoded_to = join_first_items(
     header.decode_header(original_headers['To']))
 decoded_subject = join_first_items(
     header.decode_header(original_headers['Subject']))
+
+smtp_to = parseaddr(original_headers['From'])[1]
+if not smtp_to:
+    smtp_to = decoded_from
+
+smtp_from = parseaddr(original_headers['To'])[1]
+if not smtp_from:
+    smtp_from = decoded_to
 
 conn = sqlite3.connect(
     os.path.join(my_dir, 'emails.db'),
@@ -113,7 +123,7 @@ s = smtplib.SMTP('localhost')
 # sendmail function takes 3 arguments: sender's address, recipient's address
 # and message to send - here it is sent as one string.
 s.sendmail(
-    decoded_to,
-    decoded_from,
+    smtp_to,
+    smtp_from,
     msg.as_string())
 s.quit()
