@@ -4,6 +4,7 @@ import sys
 import smtplib
 import sqlite3
 import datetime
+import syslog
 
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
@@ -60,6 +61,7 @@ conn.close()
 
 
 # Prepare and send the email
+syslog.syslog('Sending recruiter autoreply to %s' % original_headers['From'])
 
 msg = MIMEMultipart('alternative')
 msg['Subject'] = 'Re: %s' % original_headers['Subject']

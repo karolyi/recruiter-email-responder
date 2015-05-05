@@ -22,6 +22,7 @@ Used python3 modules:
 - `smtplib` to send the email via `localhost:25`
 - `sqlite3` to check the sender DB to not resend emails in a day
 - `email` to construct the email.
+- `syslog` for logging the sending of emails into syslog
 
 ## Requirements:
 
