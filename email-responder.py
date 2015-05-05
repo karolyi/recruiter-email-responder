@@ -31,7 +31,14 @@ def join_first_items(item_list):
 
 def make_address(header_item):
     parsed = parseaddr(header_item)
-    return '"%s" <%s>' % parsed
+    result = ''
+    if parsed[0]:
+        result += '"%s" <%s>' % (
+            join_first_items(header.decode_header(parsed[0])),
+            parsed[1])
+    else:
+        result += parsed[1]
+    return result
 
 # original_headers = Parser().parsestr(sys.stdin.read())
 with open('email1.txt') as fp:
@@ -46,6 +53,7 @@ decoded_subject = join_first_items(
 
 smtp_to = make_address(original_headers['From'])
 smtp_from = make_address(original_headers['To'])
+print (smtp_from, smtp_to)
 
 conn = sqlite3.connect(
     os.path.join(my_dir, 'emails.db'),
