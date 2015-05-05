@@ -19,7 +19,13 @@ os.chdir(my_dir)
 
 
 def join_first_items(item_list):
-    return ''.join([item[0] for item in item_list])
+    result_list = []
+    for item in item_list:
+        if type(item[0]) is bytes:
+            result_list.append(item[0].decode('utf-8'))
+        elif type(item[0]) is str:
+            result_list.append(item[0])
+    return ''.join(result_list)
 
 # original_headers = Parser().parsestr(sys.stdin.read())
 with open('email1.txt') as fp:
@@ -81,10 +87,8 @@ if len(rows) == 0:
 cursor.close()
 conn.close()
 
-
 # Prepare and send the email
 syslog.syslog('Sending recruiter autoreply to %s' % decoded_from)
-
 
 msg = MIMEMultipart('alternative')
 msg['Subject'] = 'Re: %s' % decoded_subject
