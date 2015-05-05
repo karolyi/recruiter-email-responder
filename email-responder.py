@@ -6,6 +6,7 @@ import smtplib
 import sqlite3
 import datetime
 import syslog
+import codecs
 
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
@@ -79,10 +80,10 @@ msg['To'] = original_headers['From']
 if original_headers['Message-Id']:
     msg['References'] = original_headers['Message-Id']
 
-with open('text-reply.txt') as fp:
+with codecs.open('text-reply.txt', 'r', 'utf-8') as fp:
     text_reply = fp.read()
 
-with open('html-reply.html') as fp:
+with codecs.open('html-reply.html', 'r', 'utf-8') as fp:
     html_reply = fp.read()
 
 part1 = MIMEText(text_reply, 'plain')
