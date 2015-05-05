@@ -15,7 +15,7 @@ from email.parser import Parser
 my_dir = os.path.dirname(os.path.realpath(__file__))
 os.chdir(my_dir)
 
-msg = Parser().parsestr(sys.stdin.read())
+original_headers = Parser().parsestr(sys.stdin.read())
 # with open('email1.txt') as fp:
 #     original_headers = Parser().parsestr(fp.read())
 
