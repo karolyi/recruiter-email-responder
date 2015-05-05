@@ -61,7 +61,7 @@ cursor = conn.cursor()
 cursor.execute(
     'SELECT * FROM email_usage WHERE email = ?',
     (
-        decoded_from,
+        smtp_to,
     )
 )
 rows = cursor.fetchall()
@@ -74,7 +74,7 @@ if len(rows):
             'WHERE email = ?'
         ),
         (
-            decoded_from,
+            smtp_to,
         )
     )
     conn.commit()
@@ -83,7 +83,7 @@ if len(rows):
         conn.close()
         syslog.syslog(
             'Not sending recruiter autoreply to %s, last sent at %s' % (
-                decoded_from, last_used_ts)
+                smtp_to, last_used_ts)
         )
         sys.exit(0)
 
@@ -95,7 +95,7 @@ if len(rows) == 0:
         ),
         (
             datetime.datetime.now(),
-            decoded_from,
+            smtp_to,
             1
         )
     )
@@ -104,12 +104,12 @@ cursor.close()
 conn.close()
 
 # Prepare and send the email
-syslog.syslog('Sending recruiter autoreply to %s' % decoded_from)
+syslog.syslog('Sending recruiter autoreply to %s' % smtp_to)
 
 msg = MIMEMultipart('alternative')
 msg['Subject'] = 'Re: %s' % decoded_subject
 msg['From'] = decoded_to
-msg['To'] = decoded_from
+msg['To'] = smtp_to
 if original_headers['Message-Id']:
     msg['References'] = original_headers['Message-Id']
 
