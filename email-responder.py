@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/local/bin/python3
 
 import sys
 import os
@@ -21,7 +21,7 @@ original_headers = Parser().parsestr(sys.stdin.read())
 #     original_headers = Parser().parsestr(fp.read())
 
 conn = sqlite3.connect(
-    'emails.db',
+    os.path.join(my_dir, 'emails.db'),
     detect_types=sqlite3.PARSE_DECLTYPES | sqlite3.PARSE_COLNAMES)
 cursor = conn.cursor()
 cursor.execute(
