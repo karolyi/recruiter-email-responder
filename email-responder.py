@@ -2,6 +2,7 @@
 
 import sys
 import os
+import io
 import smtplib
 import sqlite3
 import datetime
@@ -17,8 +18,8 @@ from email.utils import parseaddr
 my_dir = os.path.dirname(os.path.realpath(__file__))
 os.chdir(my_dir)
 
-
-original_headers = Parser().parsestr(sys.stdin.read())
+stdin_utf8 = io.TextIOWrapper(sys.stdin.buffer, encoding='utf-8')
+original_headers = Parser().parsestr(stdin_utf8.read())
 # with open('email1.txt') as fp:
 #     original_headers = Parser().parsestr(fp.read())
 
