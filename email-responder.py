@@ -13,6 +13,7 @@ from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from email.parser import Parser
 from email.utils import parseaddr
+from email.header import decode_header, make_header
 
 # CWD to our dir, just to be on the safe side
 my_dir = os.path.dirname(os.path.realpath(__file__))
@@ -25,6 +26,17 @@ original_headers = Parser().parsestr(stdin_utf8.read())
 
 sender_address = parseaddr(original_headers['From'])[1]
 receiver_address = parseaddr(original_headers['To'])[1]
+
+
+def remove_spam_flag(subject):
+    parsed_subject = decode_header(original_headers['Subject'])
+    result = tuple()
+    for item in parsed_subject:
+        result += (
+            item[0].decode(
+                'utf-8').replace('*****SPAM***** ', ''),
+            item[1]),  # Note it's a tuple
+    return result
 
 conn = sqlite3.connect(
     os.path.join(my_dir, 'emails.db'),
@@ -79,7 +91,8 @@ conn.close()
 syslog.syslog('Sending recruiter autoreply to %s' % sender_address)
 
 msg = MIMEMultipart('alternative')
-msg['Subject'] = 'Re: %s' % original_headers['Subject']
+msg['Subject'] = 'Re: %s' % make_header(
+    remove_spam_flag(original_headers['Subject']))
 msg['From'] = original_headers['To']
 msg['To'] = original_headers['From']
 if original_headers['Message-Id']:
