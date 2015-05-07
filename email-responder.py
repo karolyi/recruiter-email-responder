@@ -29,14 +29,18 @@ receiver_address = parseaddr(original_headers['To'])[1]
 
 
 def remove_spam_flag(subject):
-    parsed_subject = decode_header(original_headers['Subject'])
+    parsed_subject = decode_header(subject)
     result = tuple()
     for item in parsed_subject:
         result += (
+            # item[0].replace('*****SPAM***** ', ''),
             item[0].decode(
                 'utf-8').replace('*****SPAM***** ', ''),
             item[1]),  # Note it's a tuple
     return result
+
+# For debug
+# print (remove_spam_flag(original_headers['Subject']))
 
 conn = sqlite3.connect(
     os.path.join(my_dir, 'emails.db'),
