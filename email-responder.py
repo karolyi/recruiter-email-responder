@@ -19,6 +19,8 @@ from email.header import decode_header, make_header
 my_dir = os.path.dirname(os.path.realpath(__file__))
 os.chdir(my_dir)
 
+syslog.setlogmask(syslog.LOG_MAIL)
+
 stdin_utf8 = io.TextIOWrapper(sys.stdin.buffer, encoding='utf-8')
 original_headers = Parser().parsestr(stdin_utf8.read())
 # with open('email1.txt') as fp:
