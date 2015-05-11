@@ -32,10 +32,12 @@ def remove_spam_flag(subject):
     parsed_subject = decode_header(subject)
     result = tuple()
     for item in parsed_subject:
+        # Mystical, sometimes it's bytes, sometimes str, handle that
+        item_zero = item[0]
+        if type(item_zero) is bytes:
+            item_zero = item_zero.decode('utf-8')
         result += (
-            # item[0].replace('*****SPAM***** ', ''),
-            item[0].decode(
-                'utf-8').replace('*****SPAM***** ', ''),
+            item_zero.replace('*****SPAM***** ', ''),
             item[1]),  # Note it's a tuple
     return result
 
