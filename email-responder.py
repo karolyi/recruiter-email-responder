@@ -19,8 +19,6 @@ from email.header import decode_header, make_header
 my_dir = os.path.dirname(os.path.realpath(__file__))
 os.chdir(my_dir)
 
-syslog.setlogmask(syslog.LOG_MAIL)
-
 stdin_utf8 = io.TextIOWrapper(sys.stdin.buffer, encoding='utf-8')
 original_headers = Parser().parsestr(stdin_utf8.read())
 # with open('email1.txt') as fp:
@@ -74,9 +72,9 @@ if len(rows):
         cursor.close()
         conn.close()
         syslog.syslog(
+            syslog.LOG_INFO | syslog.LOG_MAIL,
             'Not sending recruiter autoreply to %s, last sent at %s' % (
-                sender_address, last_used_ts)
-        )
+                sender_address, last_used_ts))
         sys.exit(0)
 
 if len(rows) == 0:
@@ -96,7 +94,9 @@ cursor.close()
 conn.close()
 
 # Prepare and send the email
-syslog.syslog('Sending recruiter autoreply to %s' % sender_address)
+syslog.syslog(
+    syslog.LOG_INFO | syslog.LOG_MAIL,
+    'Sending recruiter autoreply to %s' % sender_address)
 
 msg = MIMEMultipart('alternative')
 msg['Subject'] = 'Re: %s' % make_header(
