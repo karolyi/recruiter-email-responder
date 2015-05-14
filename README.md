@@ -42,5 +42,5 @@ External modules:
 - Install virtualenv and external modules by running `tools/install.sh`
 - Initialize the sqlite db with running `tools/init-schema.sh`
 - Copy your replies (mentioned above) into the same repo directory
-- Edit your sieve configuration to pipe your given role into this tool.
+- Edit your sieve configuration to pipe your given role into this tool. The executable is `email-responder.sh`, which uses the virtualenv created.
 
