@@ -55,3 +55,6 @@ docs/_build/
 
 # PyBuilder
 target/
+
+# Ignore the in here installed virtualenv
+virtualenv/

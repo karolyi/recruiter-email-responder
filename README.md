@@ -24,6 +24,9 @@ Used python3 modules:
 - `email` to construct the email.
 - `syslog` for logging the sending of emails into syslog
 
+External modules:
+- `chardet`, to autodetect the input charset (which can vary)
+
 ## Requirements:
 
 - A mailserver.
@@ -35,7 +38,9 @@ Used python3 modules:
 
 - Install `python3` (do I need to say this?)
 - Clone this repository into a random directory, reachable for dovecot2
-- Initialize the sqlite db with running `init-schema.sh`
+- Change to that directory
+- Install virtualenv and external modules by running `tools/install.sh`
+- Initialize the sqlite db with running `tools/init-schema.sh`
 - Copy your replies (mentioned above) into the same repo directory
 - Edit your sieve configuration to pipe your given role into this tool.
 

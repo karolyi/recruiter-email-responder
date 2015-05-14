@@ -2,12 +2,12 @@
 
 import sys
 import os
-import io
 import smtplib
 import sqlite3
 import datetime
 import syslog
 import codecs
+import chardet
 
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
@@ -19,8 +19,12 @@ from email.header import decode_header, make_header
 my_dir = os.path.dirname(os.path.realpath(__file__))
 os.chdir(my_dir)
 
-stdin_utf8 = io.TextIOWrapper(sys.stdin.buffer, encoding='utf-8')
-original_headers = Parser().parsestr(stdin_utf8.read())
+input_bytes = sys.stdin.buffer.read()  # This is bytes
+
+encoding_result = chardet.detect(input_bytes)
+input_decoded = input_bytes.decode(encoding_result['encoding'])
+
+original_headers = Parser().parsestr(input_decoded)
 # with open('email1.txt') as fp:
 #     original_headers = Parser().parsestr(fp.read())
 
