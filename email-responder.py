@@ -22,6 +22,11 @@ os.chdir(my_dir)
 input_bytes = sys.stdin.buffer.read()  # This is bytes
 
 encoding_result = chardet.detect(input_bytes)
+
+syslog.syslog(
+    syslog.LOG_DEBUG | syslog.LOG_MAIL,
+    'Mail encoding: %s' % encoding_result)
+
 input_decoded = input_bytes.decode(encoding_result['encoding'])
 
 original_headers = Parser().parsestr(input_decoded)
