@@ -44,7 +44,7 @@ def remove_spam_flag(subject):
         # Mystical, sometimes it's bytes, sometimes str, handle that
         item_zero = item[0]
         if type(item_zero) is bytes:
-            item_zero = item_zero.decode('utf-8')
+            item_zero = item_zero.decode(encoding_result['encoding'])
         result += (
             item_zero.replace('*****SPAM***** ', ''),
             item[1]),  # Note it's a tuple
