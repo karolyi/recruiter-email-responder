@@ -3,14 +3,14 @@
 - Tired of constantly getting emails from recruiters who are simply too lazy
   to understand your terms?
 - Did you at first give hints in your replies, mentioning your terms but they
-  don't give a flying fuck?
+  did't give a flying fuck?
 - Did you already set up a vacation autoresponse but they use lists and your
   emails get delivered to the list response (/dev/null most of the time)?
-- Did you get a fuckton of recurring irrelevant inquiries?
+- Do you get a fuckton of recurring irrelevant inquiries?
 
 Then this is for you. If you set up your email server to pipe the email body
 into this tool after filtering for the addresses (used with dovecot2/sieve
-filters), it will send replies to the `From` header, not the `Return-Path` one.
+filters in my case), it will send replies to the `From` header, not the `Return-Path` one.
 
 Am I a dick for implementing this? No more than the recruiters unwilling to
 update their filters/mailing lists.
@@ -42,5 +42,5 @@ External modules:
 - Install virtualenv and external modules by running `tools/install.sh`
 - Initialize the sqlite db with running `tools/init-schema.sh`
 - Copy your replies (mentioned above) into the same repo directory
-- Edit your sieve configuration to pipe your given role into this tool. The executable is `email-responder.sh`, which uses the virtualenv created.
+- Edit your sieve configuration/procmailrc to pipe your given role into this tool. The executable is `email-responder.sh`, which uses the virtualenv created (not `email-responder.py`!).
 
