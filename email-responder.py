@@ -27,7 +27,8 @@ syslog.syslog(
     syslog.LOG_DEBUG | syslog.LOG_MAIL,
     'Mail encoding: %s' % encoding_result)
 
-input_decoded = input_bytes.decode(encoding_result['encoding'])
+input_decoded = input_bytes.decode(
+    encoding_result['encoding'], errors='replace')
 
 original_headers = Parser().parsestr(input_decoded)
 # with open('email1.txt') as fp:
@@ -45,12 +46,12 @@ def remove_spam_flag(subject):
         item_zero = item[0]
         item_one = item[1]
         if type(item_one) is bytes:
-            item_one = item_one.decode('ascii')
+            item_one = item_one.decode('ascii', errors='replace')
         if item_one is None:
             # If the encoding is None, we assume it's ascii
             item_one = 'ascii'
         if type(item_zero) is bytes:
-            item_zero = item_zero.decode(item_one)
+            item_zero = item_zero.decode(item_one, errors='replace')
         result += (
             item_zero.replace('*****SPAM***** ', ''),
             item_one),  # Note it's a tuple
