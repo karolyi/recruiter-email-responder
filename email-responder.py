@@ -76,8 +76,8 @@ if len(rows):
     one_day_before = datetime.datetime.now() - datetime.timedelta(days=1)
     cursor.execute(
         (
-            'UPDATE email_usage SET mailcount = mailcount + 1 '
-            'WHERE email = ?'
+            'UPDATE email_usage SET mailcount = mailcount + 1, '
+            'lastused = CURRENT_TIMESTAMP WHERE email = ?'
         ),
         (
             sender_address,
