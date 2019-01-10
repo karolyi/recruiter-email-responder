@@ -35,7 +35,9 @@ original_headers = Parser().parsestr(input_decoded)
 #     original_headers = Parser().parsestr(fp.read())
 
 sender_address = parseaddr(original_headers['From'])[1]
-receiver_address = parseaddr(original_headers['To'])[1]
+receiver_address = parseaddr(original_headers['To'])[1] \
+    if not sender_address.endswith('@linkedin.com') \
+    else parseaddr(original_headers['Reply-To'])[1]
 
 
 def remove_spam_flag(subject):
