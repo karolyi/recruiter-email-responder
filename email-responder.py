@@ -34,7 +34,7 @@ original_headers = Parser().parsestr(input_decoded)
 # with open('email1.txt') as fp:
 #     original_headers = Parser().parsestr(fp.read())
 
-recipient_address = parseaddr(original_headers['From'])[1]
+recipient_address = parseaddr(original_headers['From'])[1] \
     if not parseaddr(original_headers['From'])[1].endswith('@linkedin.com') \
     else parseaddr(original_headers['Reply-To'])[1]
 sender_address = parseaddr(original_headers['To'])[1]
