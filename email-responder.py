@@ -34,10 +34,10 @@ original_headers = Parser().parsestr(input_decoded)
 # with open('email1.txt') as fp:
 #     original_headers = Parser().parsestr(fp.read())
 
-sender_address = parseaddr(original_headers['From'])[1]
-receiver_address = parseaddr(original_headers['To'])[1] \
-    if not sender_address.endswith('@linkedin.com') \
+recipient_address = parseaddr(original_headers['From'])[1]
+    if not parseaddr(original_headers['From'])[1].endswith('@linkedin.com') \
     else parseaddr(original_headers['Reply-To'])[1]
+sender_address = parseaddr(original_headers['To'])[1]
 
 
 def remove_spam_flag(subject):
@@ -69,7 +69,7 @@ cursor = conn.cursor()
 cursor.execute(
     'SELECT * FROM email_usage WHERE email = ?',
     (
-        sender_address,
+        recipient_address,
     )
 )
 rows = cursor.fetchall()
@@ -82,7 +82,7 @@ if len(rows):
             'lastused = CURRENT_TIMESTAMP WHERE email = ?'
         ),
         (
-            sender_address,
+            recipient_address,
         )
     )
     conn.commit()
@@ -92,7 +92,7 @@ if len(rows):
         syslog.syslog(
             syslog.LOG_INFO | syslog.LOG_MAIL,
             'Not sending recruiter autoreply to %s, last sent at %s' % (
-                sender_address, last_used_ts))
+                recipient_address, last_used_ts))
         sys.exit(0)
 
 if len(rows) == 0:
@@ -103,7 +103,7 @@ if len(rows) == 0:
         ),
         (
             datetime.datetime.now(),
-            sender_address,
+            recipient_address,
             1
         )
     )
@@ -114,7 +114,7 @@ conn.close()
 # Prepare and send the email
 syslog.syslog(
     syslog.LOG_INFO | syslog.LOG_MAIL,
-    'Sending recruiter autoreply to %s' % sender_address)
+    'Sending recruiter autoreply to %s' % recipient_address)
 
 msg = MIMEMultipart('alternative')
 msg['Subject'] = 'Re: %s' % make_header(
@@ -140,7 +140,7 @@ s = smtplib.SMTP('localhost')
 # sendmail function takes 3 arguments: sender's address, recipient's address
 # and message to send - here it is sent as one string.
 s.sendmail(
-    receiver_address,
     sender_address,
+    recipient_address,
     msg.as_string())
 s.quit()
