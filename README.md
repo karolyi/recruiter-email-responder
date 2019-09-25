@@ -1,3 +1,5 @@
+[![Buy me a coffee](https://bmc-cdn.nyc3.digitaloceanspaces.com/BMC-button-images/custom_images/orange_img.png)](https://www.buymeacoffee.com/t159YOryp)
+
 # recruiter-email-responder
 
 - Tired of constantly getting emails from recruiters who are simply too lazy
