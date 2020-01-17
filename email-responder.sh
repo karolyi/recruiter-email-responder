@@ -6,4 +6,4 @@ cd $PROJECT_DIR
 
 . venv/bin/activate
 
-exec python email-responder.py
+exec python3 email-responder.py
